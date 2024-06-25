@@ -4,7 +4,7 @@
 # To get started with TDD, see the `README.md` file in your
 # `ruby/simple-cipher` directory.
 class Cipher
-  def initialize(key = "aaaaaaaaaa")
+  def initialize(key = 'aaaaaaaaaa')
     @key = key
 
     contains_upper
@@ -15,44 +15,44 @@ class Cipher
   attr_reader :key
 
   def encode(plaintext)
-    result = ""
-    
-    for pos in 0...plaintext.length
-      shift = key[pos].ord - 97
-      result += (plaintext[pos].ord + shift).chr
+    result = ''
+
+    plaintext.each_char.with_index do |_letter, index|
+      shift = key[index].ord - 97
+      temp = plaintext[index].ord + shift
+      temp -= 26 if temp > 122
+      result += temp.chr
     end
     result
   end
 
   def decode(plaintext)
-    result = ""
+    result = ''
 
-    for pos in 0...plaintext.length
-      shift = key[pos].ord - 97
-      result += (plaintext[pos].ord - shift).chr
+    plaintext.each_char.with_index do |_letter, index|
+      shift = key[index].ord - 97
+      result += (plaintext[index].ord - shift).chr
     end
     result
   end
 
   private
+
   def contains_upper
-    if /[[:upper:]]/.match(key)
-      raise ArgumentError
-    end
+    return unless /[[:upper:]]/.match(key)
+
+    raise ArgumentError
   end
 
   def contains_number
-    if key =~ /\d/
-      raise ArgumentError
-    end
+    return unless key =~ /\d/
+
+    raise ArgumentError
   end
 
   def is_empty_string
-    if key == ""
-      raise ArgumentError
-    end
+    return unless key == ''
+
+    raise ArgumentError
   end
 end
-
-puts "***************"
-puts "a".ord
