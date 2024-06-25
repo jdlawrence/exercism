@@ -4,8 +4,9 @@
 # To get started with TDD, see the `README.md` file in your
 # `ruby/simple-cipher` directory.
 class Cipher
-  def initialize(key = 'aaaaaaaaaa')
-    @key = key
+  def initialize(key = nil)
+    @key = key || (1..100).map { rand(97..122).chr }.join
+    # @key = key
 
     contains_upper
     contains_number
@@ -31,7 +32,9 @@ class Cipher
 
     plaintext.each_char.with_index do |_letter, index|
       shift = key[index].ord - 97
-      result += (plaintext[index].ord - shift).chr
+      temp = plaintext[index].ord - shift
+      temp += 26 if temp < 97
+      result += temp.chr
     end
     result
   end
